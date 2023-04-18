@@ -77,7 +77,7 @@ bot.on('chat', (username, message) => {
     checkMessage(username, message);
     });
 
-    const similarMessagesThreshold = 4;
+const similarMessagesThreshold = 4;
 const similarMessagesInterval = 90 * 1000; // 1.5 minutes in milliseconds
 
 let lastMessages = {};
@@ -94,11 +94,14 @@ bot.on('chat', (username, message) => {
         lastMessages[username].count++;
         if (lastMessages[username].count >= similarMessagesThreshold) {
              const date = moment.tz(timezone).format('DD.MM.YYYY HH:mm:ss');
-             const userIds = [5230010894, 1626707905];
-             telegramBot.sendMessage(userId,
+             telegramBot.sendMessage(chatId,
               `📅:[${date}]\nИгрок ${username} флудит\n\nОтправка ${lastMessages[username].count} похожих сообщений за 1.5 минуты\n\nКоманды:\n\n<code>/lookup ${username}</code>\n<code>/warn ${username} флуд</code>`, { parse_mode: 'html' });
-             }}
-            });
+            }
+          }  else {
+              lastMessages[username] = { count: 1, timestamp: now, message };
+          } 
+      
+        });
  
  function searchWordsByTemplate(template, words) {
     const regexString = template.replace(/\?/g, '.');
@@ -120,30 +123,6 @@ telegramBot.onText(/\.с (.+)/, (msg, match) => {
   const reply = foundWords.length === 0 ? 'Слов не найдено' : foundWords.join(', ');
   telegramBot.sendMessage(chatId, reply);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
